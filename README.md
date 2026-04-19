@@ -1,5 +1,7 @@
 # MUAC AI Framework
 
+> 📖 **For a visual, shareable overview of the framework, see [OVERVIEW.md](OVERVIEW.md).**
+
 This repository provides a bootstrap AI planning flow for engineering teams.
 
 It is an **AI planning and bootstrap scaffold**, not an application codebase. Its purpose is to help teams analyze their project context, inspect real repository state, and produce a low-noise AI enablement plan before any implementation.
