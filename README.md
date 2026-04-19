@@ -7,13 +7,14 @@ It is an **AI planning and bootstrap scaffold**, not an application codebase. It
 ## Current mode
 - Teams place approved project documents under `docs/references/`
 - The bootstrap planner analyzes those documents and the target project repository
-- The agent produces a detailed AI enablement plan
+- The planner evaluates every candidate AI asset against the user's stated objective, repository evidence, and document evidence **before** producing any recommendation
+- Only then does the agent produce the final AI enablement plan with a shortlist of assets
 - The plan can then be reviewed, challenged, approved, and optionally implemented
 
 ## Quick Start
 1. Copy this framework into a **real target repository** or a safe branch of that repository.
 2. Place approved project documents under `docs/references/`.
-3. Run the `/bootstrap-ai-plan-local` prompt to generate a draft AI enablement plan.
+3. Run the `/bootstrap-ai-plan-local` prompt to generate a draft AI enablement plan. **State your objective clearly when you run it** — for example: *"I want UI test automation for this repo"*, *"I need backend/API test support"*, or *"I want agents and skills to help implement feature X"*. The prompt evaluates every candidate asset against your objective, repo evidence, and document evidence, then recommends only the strongest shortlist.
 4. Optionally run `/refine-ai-plan-local` to tighten the plan further.
 5. Review the plan carefully.
 6. Approve implementation only if you are satisfied — nothing should be created or modified without explicit approval.
@@ -71,6 +72,22 @@ The `/bootstrap-ai-plan-local` and `/refine-ai-plan-local` prompts both delegate
 
 You do not invoke these subagents directly; they run as part of the planning flow.
 
+## How recommendations are decided
+The planner does not recommend AI assets loosely. It first evaluates every candidate instruction, skill, agent, prompt, and approved MCP guidance item, then decides what to keep.
+
+Each candidate is judged against:
+- the user's **stated objective**
+- **repo evidence** — does the actual codebase support or need it?
+- **document evidence** — do the approved references justify it?
+- **maintenance cost** — low / medium / high
+
+Each candidate is then classified as:
+- **recommend now** — clear fit, strong evidence, acceptable cost
+- **defer** — plausible but not justified yet, or cost too high for today's value
+- **reject** — no meaningful fit with the objective or evidence
+
+Only `recommend now` items appear in the final shortlist.
+
 ## Implementation mode
 Planning and implementation are deliberately separated:
 
@@ -88,3 +105,4 @@ When WorkIQ is available, the same framework can use approved enterprise sources
 - Plan first
 - Do not modify project repositories automatically
 - Ask for approval before any implementation
+- Evaluate every candidate AI asset against the stated objective, repo evidence, and document evidence before recommending it

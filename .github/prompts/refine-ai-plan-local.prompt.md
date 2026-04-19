@@ -17,10 +17,17 @@ Instructions:
 1. Read the current approved documents under `docs/references/`
 2. Reinspect the current repository state as needed
 3. Review the existing draft AI enablement plan provided in the current chat context
-4. Tighten the plan by removing weakly justified recommendations, reducing unnecessary complexity, and improving clarity
-5. Keep the smallest useful setup
-6. Preserve anything that is strongly justified by either documents or repo evidence
-7. End by asking for approval before implementation
+4. Re-check the user's stated objective from the current chat context and ensure the plan remains aligned with it
+5. Tighten the plan by removing weakly justified recommendations, reducing unnecessary complexity, and improving clarity
+6. Remove or defer any item that shows **any** of the following:
+   - weak objective fit
+   - weak repo evidence
+   - weak document evidence
+   - high maintenance cost without strong value
+7. Remove recommendations that do not clearly support the stated objective
+8. Keep the smallest useful setup for that specific purpose
+9. Preserve anything that is strongly justified by the documents, the repo evidence, or the stated objective
+10. End by asking for approval before implementation
 
 Your output must contain these sections:
 
@@ -32,6 +39,17 @@ Your output must contain these sections:
 # Refined Repository Assessment
 - Any important repo observations affecting the plan
 - Any corrections to the earlier assessment
+
+# Candidate Asset Evaluation
+Re-evaluate the surviving or debated items from the prior plan. For each, state:
+- asset type
+- proposed name
+- objective fit
+- repo evidence
+- doc evidence
+- maintenance cost: low / medium / high
+- decision: keep / defer / reject
+- rationale
 
 # Refined Recommended AI Assets
 For each recommendation, state:
