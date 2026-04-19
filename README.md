@@ -17,6 +17,7 @@ It is an **AI planning and bootstrap scaffold**, not an application codebase. It
 4. Optionally run `/refine-ai-plan-local` to tighten the plan further.
 5. Review the plan carefully.
 6. Approve implementation only if you are satisfied — nothing should be created or modified without explicit approval.
+7. Once approved, run `/implement-ai-plan-local` to apply only the approved items.
 
 > **Note:** This framework is best used against a **separate target repository** containing real application code. Pointing it at this scaffold itself will mostly describe the scaffold.
 
@@ -40,7 +41,7 @@ flowchart TD
     G -->|Yes| I[Implement only the approved items]
 ```
 
-### In plain English
+## In plain English
 
 - This framework is not the final solution for every team.
 - A team uses it inside a real project repo or a safe branch of that repo.
@@ -69,6 +70,16 @@ The `/bootstrap-ai-plan-local` and `/refine-ai-plan-local` prompts both delegate
 - `challenger-reviewer` — critiques the draft plan for weak assumptions and overengineering before it is shown for approval
 
 You do not invoke these subagents directly; they run as part of the planning flow.
+
+## Implementation mode
+Planning and implementation are deliberately separated:
+
+- The planning prompts (`/bootstrap-ai-plan-local`, `/refine-ai-plan-local`) only produce and refine a plan. They do not create files.
+- The implementation prompt (`/implement-ai-plan-local`) applies **only the items that were explicitly approved** in the current chat.
+- Implementation mode is intentionally restricted to AI scaffolding files — copilot instructions, path-specific instruction files, agents, skills, prompts, and approved MCP guidance.
+- Application source code, dependency manifests, and CI/CD configuration are out of scope for this framework.
+
+If approval is unclear, the implementation flow stops and asks for clarification rather than guessing.
 
 ## Future mode
 When WorkIQ is available, the same framework can use approved enterprise sources such as Confluence or Microsoft 365 content instead of or in addition to local reference documents.
