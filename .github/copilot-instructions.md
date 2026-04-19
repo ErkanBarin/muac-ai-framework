@@ -37,5 +37,6 @@ For structured planning sessions, use the existing prompt entry points:
 
 - [`bootstrap-ai-plan-local.prompt.md`](prompts/bootstrap-ai-plan-local.prompt.md) — initial bootstrap planning for a new target.
 - [`refine-ai-plan-local.prompt.md`](prompts/refine-ai-plan-local.prompt.md) — refinement of an existing plan.
+- [`implement-ai-plan-local.prompt.md`](prompts/implement-ai-plan-local.prompt.md) — applies only explicitly approved AI scaffold items.
 
 Start from these prompts rather than improvising a new planning flow.
