@@ -14,11 +14,11 @@ It is an **AI planning and bootstrap scaffold**, not an application codebase. It
 ## Quick Start
 1. Copy this framework into a **real target repository** or a safe branch of that repository.
 2. Place approved project documents under `docs/references/`.
-3. Run the `/bootstrap-ai-plan-local` prompt to generate a draft AI enablement plan. **State your objective clearly when you run it** — for example: *"I want UI test automation for this repo"*, *"I need backend/API test support"*, or *"I want agents and skills to help implement feature X"*. The prompt evaluates every candidate asset against your objective, repo evidence, and document evidence, then recommends only the strongest shortlist.
-4. Optionally run `/refine-ai-plan-local` to tighten the plan further.
+3. Invoke the planning prompt **together with your objective in the same request**. The pattern is `/<prompt-name> <objective>`. For example: `/bootstrap-ai-plan-local I want UI test automation for this repo`. The prompt evaluates every candidate asset against your objective, repo evidence, and document evidence, then recommends only the strongest shortlist.
+4. Optionally tighten the plan with a narrower focus, for example: `/refine-ai-plan-local Focus the plan only on UI test automation for role-based workflows`.
 5. Review the plan carefully.
 6. Approve implementation only if you are satisfied — nothing should be created or modified without explicit approval.
-7. Once approved, run `/implement-ai-plan-local` to apply only the approved items.
+7. Once approved, run the implementation prompt with the explicit scope you are approving, for example: `/implement-ai-plan-local Approve and implement only the recommended repo instructions and UI testing skill`.
 
 > **Note:** This framework is best used against a **separate target repository** containing real application code. Pointing it at this scaffold itself will mostly describe the scaffold.
 
