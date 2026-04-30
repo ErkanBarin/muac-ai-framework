@@ -1,228 +1,244 @@
-# 🧭 MUAC AI Framework — Visual Overview
+# 🧭 MUAC AI-Assisted Engineering Framework — Showcase
 
-> **A bootstrap AI planning flow for engineering teams.**
-> Plan before you build. Evaluate every candidate AI asset against your real objective, your real repo, and your approved docs. Implement only what was explicitly approved.
-
-[![Repo](https://img.shields.io/badge/GitHub-muac--ai--framework-181717?logo=github)](https://github.com/ErkanBarin/muac-ai-framework)
-[![Mode: Plan first](https://img.shields.io/badge/mode-plan%20first-4C1D95)](#-the-three-modes-at-a-glance)
-[![Approval gate: explicit](https://img.shields.io/badge/approval-explicit-059669)](#-the-approval-gate)
-[![Scope: AI scaffolding only](https://img.shields.io/badge/scope-AI%20scaffolding-2563EB)](#-what-gets-installed-when-you-approve)
+> **A reusable, governed platform pattern for AI-assisted engineering, QA, operations, safety, infrastructure, data, and documentation work across an organization.**
+>
+> *This repository is a proposal-grade boilerplate. Nothing here implies that any tool, vendor, or integration has been formally approved by MUAC — it is a structure teams can copy, adapt, and discuss.*
 
 ---
 
-## 🎯 The three modes at a glance
+## The one-line message
 
-| | **🗂️ Plan** | **🔎 Evaluate & Shortlist** | **🚀 Implement** |
-|---|---|---|---|
-| **What happens** | State your objective. The planner reads approved docs + inspects your repo + drafts a focused plan. | Every candidate is scored on objective fit, repo evidence, doc evidence, and maintenance cost — then classified. | After your explicit approval, only the approved AI scaffolding files are created. |
-| **Command** | `/bootstrap-ai-plan-local <objective>` | (runs automatically inside planning) | `/implement-ai-plan-local <scope>` |
-| **Creates files?** | ❌ No | ❌ No | ✅ Yes — only approved ones |
-| **Touches app code?** | ❌ No | ❌ No | ❌ Never |
+> **Do not pick one chatbot. Build a secure AI-assisted engineering platform: approved assistants, governed MCP tools, enterprise/team RAG, project memory, and write-back discipline.**
 
 ---
 
-## 🧭 How teams use the framework
+## The 30-second pitch
+
+| Layer | What it solves | Where it lives |
+|---|---|---|
+| 🤖 **Approved assistants** | Consistent, audited entry points | Claude Code via MS Foundry, GitHub Copilot Enterprise, Microsoft 365 Copilot |
+| 🧠 **Enterprise knowledge** | Broad org docs, meetings, decisions | M365 Copilot connectors / Work IQ / Microsoft Graph |
+| 🧬 **Team RAG** | Domain-deep, ACL-protected corpora | Azure AI Search index per team |
+| 📁 **Project memory** | Active delivery truth | `docs/memory/*` inside each repo |
+| 🔧 **Governed MCP catalog** | Live system access with tiers | Approved MCP servers (Azure, Atlassian, Playwright, read-only DB, …) |
+| 🛡️ **Permissions & audit** | No data leakage, traceable actions | Entra ID groups, ACL filtering before retrieval, audit logs |
+
+---
+
+## Full enterprise architecture
 
 ```mermaid
 flowchart TD
-    A[Team has a real project repo] --> B[Copy or add this framework into the target repo or a safe branch]
-    B --> C[Place approved docs in docs/references]
-    C --> D["Run /bootstrap-ai-plan-local &lt;objective&gt;"]
-    D --> E[Bootstrap planner orchestrates]
-    E --> E1[docs-reader reads project docs]
-    E --> E2[repo-inspector checks real repo state]
-    E --> E3[challenger-reviewer critiques the draft plan]
-    E1 --> F[Final AI enablement plan]
-    E2 --> F
-    E3 --> F
-    F --> G{Team approves?}
-    G -->|No| H[Run /refine-ai-plan-local or revise manually]
-    H --> F
-    G -->|Yes| I[Implement only the approved items]
+    A[Departments<br/>SRS · OSDR · Engineering · QA · Ops · Safety · Infra · Data · Docs] --> B[Approved AI entrypoints]
+
+    B --> C[Claude Code via MS Foundry<br/>deep engineering + investigation]
+    B --> D[GitHub Copilot Enterprise<br/>daily IDE workflow]
+    B --> E[M365 Copilot / Work IQ<br/>enterprise context]
+
+    C --> F[Governed MCP Gateway]
+    D --> F
+    E --> G[Enterprise Knowledge Layer]
+
+    G --> H[M365 Copilot Connectors<br/>SharePoint · Confluence · Teams · Jira · Docs]
+    G --> I[Department RAG Indexes<br/>Azure AI Search]
+    G --> J[Repo-local Memory<br/>active project truth]
+
+    F --> K[Approved Tool Catalog]
+    K --> K1[Azure MCP]
+    K --> K2[Bitbucket / Git]
+    K --> K3[Jira / Confluence]
+    K --> K4[Playwright MCP]
+    K --> K5[Read-only DB Views]
+    K --> K6[CI / Test Runner]
+    K --> K7[Observability / Logs]
+    K --> K8[Guarded Mutation Tools]
+
+    J --> L[Department Workflows]
+    H --> L
+    I --> L
+    K --> L
+
+    L --> M[Outputs<br/>PRs · Tests · Jira · Confluence · Reports · ADRs]
+    M --> J
+    M --> H
 ```
 
 ---
 
-## ⚡ Quick Start
-
-> 💡 **The usage pattern**: invoke every prompt **with your objective in the same request**.
-> `/<prompt-name> <objective>`
-
-<details>
-<summary><b>Step 1 — Put this framework in a real repo</b></summary>
-
-Copy the framework into a **real target repository** or a safe branch of it.
-
-> ⚠️ **Avoid meta-planning**: don't point the framework at this scaffold itself — the planner will only describe the scaffold. Always use a real target repo.
-</details>
-
-<details>
-<summary><b>Step 2 — Add approved docs</b></summary>
-
-Place the approved project documents under `docs/references/`. Typical items:
-
-- 📄 System Specification Summary (SSS)
-- 🧪 System Test Description (STD)
-- 🏛️ Architecture notes
-</details>
-
-<details open>
-<summary><b>Step 3 — Run the bootstrap planner</b></summary>
-
-Examples:
-
-```text
-/bootstrap-ai-plan-local I want UI test automation for this repo
-```
-
-```text
-/bootstrap-ai-plan-local I need backend/API test support
-```
-
-```text
-/bootstrap-ai-plan-local I want agents and skills to help implement feature X
-```
-
-The prompt evaluates every candidate asset against your objective, the repo, and your approved docs — then produces a shortlist.
-</details>
-
-<details>
-<summary><b>Step 4 — Optionally refine</b></summary>
-
-Narrow the focus further:
-
-```text
-/refine-ai-plan-local Focus the plan only on UI test automation for role-based workflows
-```
-</details>
-
-<details>
-<summary><b>Step 5 — Review</b></summary>
-
-Read the plan carefully. Look at the **Candidate Asset Evaluation** section to see which items were recommended, deferred, or rejected — and why.
-</details>
-
-<details>
-<summary><b>Step 6 — Approve (only if satisfied)</b></summary>
-
-Nothing is created until you explicitly approve in chat.
-</details>
-
-<details>
-<summary><b>Step 7 — Implement the approved scope</b></summary>
-
-```text
-/implement-ai-plan-local Approve and implement only the recommended repo instructions and UI testing skill
-```
-
-The implementation prompt creates **only** the items you explicitly approved. It will not invent extras.
-</details>
-
----
-
-## 🧩 The three subagents
-
-The planner is a three-subagent orchestration. You never call them directly — they run automatically inside the planning prompts.
-
-| Subagent | Role | Provides |
-|---|---|---|
-| 📘 **`docs-reader`** | Summarizes approved documents under `docs/references/` | The *intent* view: what the target system is supposed to do |
-| 🔍 **`repo-inspector`** | Inspects the actual repo — structure, tooling, tests, conventions | The *reality* view: what actually exists today |
-| ⚔️ **`challenger-reviewer`** | Critiques the draft plan for weak assumptions, overengineering, and missing risks | A dedicated skeptic that runs **before** the plan is shown for approval |
-
----
-
-## 📦 What gets copied where
+## Memory hierarchy — the right knowledge in the right place
 
 ```mermaid
 flowchart LR
-    A[muac-ai-framework] --> B[Target project repo]
-    B --> C[.github/agents]
-    B --> D[.github/prompts]
-    B --> E[.github/copilot-instructions.md]
-    B --> F[docs/references]
-    F --> G[SSS / STD / architecture docs]
-    B --> H[Run prompts against real codebase]
+    A[Company memory<br/>Confluence · SharePoint · Teams · Jira · M365] --> Z[Assistant]
+    B[Team memory<br/>Team RAG · Azure AI Search · ICDs · Architecture] --> Z
+    C[Project memory<br/>docs/memory/* · current truth] --> Z
+    D[Live system context<br/>logs · DBs · CI · Azure · brokers] --> Z
+    Z --> R[Answer with citations<br/>+ allowed actions]
+    R --> WB[Write-back to durable layer]
+    WB --> A
+    WB --> B
+    WB --> C
 ```
 
----
+| Memory layer | Purpose | Storage | Reach |
+|---|---|---|---|
+| **Company memory** | Broad org docs, meetings, policies | M365 Graph / connector indexes | M365 Copilot, Work IQ |
+| **Team memory** | ICDs, architecture, testability, domain knowledge | Azure AI Search team index | Team RAG MCP |
+| **Project memory** | Coverage, blockers, decisions, selectors, route maps | Git markdown (`docs/memory/*`) | Direct file read by Claude/Copilot |
+| **Live system context** | DB rows, logs, CI state, Azure status | Source systems (no copy) | Approved MCP tools, read-only first |
 
-## 🧪 The decision rubric
-
-Every candidate AI asset is evaluated on four axes before any recommendation is made:
-
-| Axis | Question |
-|---|---|
-| 🎯 **Objective fit** | How well does it support the stated goal? |
-| 📂 **Repo evidence** | Does the codebase support or need it? |
-| 📄 **Doc evidence** | Do the approved references justify it? |
-| 🔧 **Maintenance cost** | Low / medium / high? |
-
-Each candidate is then classified:
-
-| Decision | Meaning |
-|---|---|
-| ✅ **`recommend now`** | Clear fit, strong evidence, acceptable cost — ships in the final shortlist |
-| 🕓 **`defer`** | Plausible but not justified yet, or cost too high for today's value |
-| ❌ **`reject`** | No meaningful fit with the objective or evidence |
-
-**Only `recommend now` items reach the final `# Recommended AI Assets` shortlist.**
+**Core rule:** *The more sensitive the document, the less it should be copied.*
 
 ---
 
-## 🛡️ The approval gate
+## Team RAG flow
 
-> 🔒 **Nothing is created without your explicit approval in chat.**
-> If the approval scope is unclear, the implementation flow **stops and asks** rather than guessing. This is deliberate — the cost of a bad file creation is higher than the cost of asking.
+```mermaid
+flowchart LR
+    A[Team sources<br/>Confluence · SharePoint · Repos · Controlled stores] --> B[Ingestion pipeline]
+    B --> C[Chunk · classify · attach metadata · attach ACL]
+    C --> D[Azure AI Search team index]
+    E[Claude / Copilot / Foundry agent] --> F[Team RAG MCP]
+    F --> G[Resolve user identity + Entra groups]
+    G --> H[Query Azure AI Search<br/>with ACL filter]
+    D --> H
+    H --> I[Allowed chunks only]
+    I --> J[Answer with citations]
+```
 
----
-
-## 🏗️ What gets installed (when you approve)
-
-### ✅ Allowed locations
-
-| Type | Location |
-|---|---|
-| Repo-wide Copilot instructions | `.github/copilot-instructions.md` |
-| Path-specific instructions | `.github/instructions/*.instructions.md` |
-| Agents | `.github/agents/*.md` |
-| Skills | `.github/skills/**` |
-| Prompts | `.github/prompts/*.md` |
-| Approved MCP guidance | *if explicitly approved* |
-
-### ❌ Never touched
-
-- Application source code
-- Dependency manifests (`package.json`, `requirements.txt`, etc.)
-- CI/CD workflows
-- Anything the user didn't approve
+The model **never** receives chunks the user is not allowed to see — filtering happens before retrieval.
 
 ---
 
-## 🧱 Core principles
+## Permission / security trimming
+
+```mermaid
+flowchart TD
+    A[User asks question] --> B[Authenticate via Entra ID]
+    B --> C[Resolve user groups]
+    C --> D[Run search with ACL filter]
+    D --> E{Document ACL matches user/groups?}
+    E -->|Yes| F[Return chunk + citation]
+    E -->|No| G[Drop chunk silently]
+    F --> H[Assistant answers using allowed sources only]
+    G --> I[If no allowed content remains: "no accessible result / restricted"]
+```
+
+| Sensitivity | Example | Recommended retrieval | AI access |
+|---|---|---|---|
+| **L0 General internal** | Coding standards, onboarding | Synced connector | Broad internal |
+| **L1 Team internal** | Team design notes | Team RAG with group ACL | Team members |
+| **L2 Restricted technical** | Interface specs, environment docs | Team RAG strict ACL or federated | Approved groups |
+| **L3 Sensitive / security-risk** | Threat models, vuln details | Federated retrieval only, minimal summary | Case-by-case |
+| **L4 Secret / regulated** | Credentials, classified ops | No default AI access | Approved secure process only |
+
+---
+
+## MCP tool governance
+
+```mermaid
+flowchart TD
+    T0[Tier 0<br/>Read public/internal docs] --> T1[Tier 1<br/>Read repo / code]
+    T1 --> T2[Tier 2<br/>Edit local branch]
+    T2 --> T3[Tier 3<br/>Run local tests]
+    T3 --> T4[Tier 4<br/>Write Jira / Confluence]
+    T4 --> T5[Tier 5<br/>Run live env tests]
+    T5 --> T6[Tier 6<br/>Mutate test systems]
+    T6 --> T7[Tier 7<br/>Infra / security changes]
+
+    T0 -.broadly allowed.-> A[Default policy]
+    T3 -.broadly allowed.-> A
+    T4 -.gated + audited.-> B[Approval required]
+    T7 -.gated + audited.-> B
+```
+
+See [`docs/mcp-catalog.md`](docs/mcp-catalog.md) for the full tool list and policies.
+
+---
+
+## Team onboarding flow
+
+```mermaid
+flowchart TD
+    A[1. Source inventory] --> B[2. Classify sensitivity]
+    B --> C[3. Pick retrieval type<br/>synced · federated · team RAG · repo memory]
+    C --> D[4. Configure ingestion]
+    D --> E[5. Define metadata + ACL]
+    E --> F[6. Deploy Team RAG MCP]
+    F --> G[7. Define golden questions]
+    G --> H[8. Run permission tests]
+    H --> I[9. Add allowed MCP tools<br/>read-only first]
+    I --> J[10. Go live + audit + write-back]
+```
+
+Templates for steps 1–9 live in [`templates/team-onboarding/`](templates/team-onboarding/).
+
+---
+
+## What teams copy vs what the platform team provides
+
+| Concern | Platform team provides centrally | Each team customizes |
+|---|---|---|
+| Approved AI assistants | ✅ Vendor agreements, identity wiring | Picks which to use |
+| MCP gateway + catalog | ✅ Approved server list, tiers, audit | Selects allowed tools per repo |
+| Team RAG platform (Azure AI Search) | ✅ Index template, ingestion pipeline, MCP server template | Sources, metadata, ACLs, golden questions |
+| Permission/identity model | ✅ Entra groups, ACL conventions | Group memberships, group→ACL mapping |
+| Memory pattern | ✅ Repo memory templates | Actual project content |
+| Audit + governance | ✅ Logging, dashboards | Local write-back discipline |
+| Department agent kits | ✅ Starter kit structure | Agent personas, prompts, golden questions |
+
+---
+
+## What this repo demonstrates
+
+| Asset | Where | Purpose |
+|---|---|---|
+| Enterprise platform showcase | This file | One-page architectural narrative |
+| Quickstart for teams + repos | [`QUICKSTART.md`](QUICKSTART.md) | How to onboard a team or a project |
+| Connectors & RAG options | [`docs/connectors-and-rag-options.md`](docs/connectors-and-rag-options.md) | When to use synced/federated connectors, Work IQ, Atlassian MCP, Team RAG, repo memory, live MCP |
+| Permission model | [`docs/permission-model.md`](docs/permission-model.md) | Five-layer access control + worked SRS examples |
+| Implementation roadmap | [`docs/implementation-roadmap.md`](docs/implementation-roadmap.md) | Phase-by-phase plan from governance to production |
+| External knowledge map | [`docs/external-knowledge.md`](docs/external-knowledge.md) | How a repo declares which retrieval option per question type |
+| Tool policy | [`docs/tool-policy.md`](docs/tool-policy.md) | Reusable per-repo tool policy template |
+| Demo script | [`docs/demo-script.md`](docs/demo-script.md) | 10-minute walkthrough for stakeholders |
+| Team RAG implementation guide | [`docs/team-rag-framework.md`](docs/team-rag-framework.md) | Step-by-step Team RAG pattern |
+| MCP catalog & governance | [`docs/mcp-catalog.md`](docs/mcp-catalog.md) | Approved tool tiers and policies |
+| Project memory pattern | [`docs/project-memory-pattern.md`](docs/project-memory-pattern.md) | Per-repo memory structure |
+| Agent / skill / prompt model | [`docs/agent-skill-model.md`](docs/agent-skill-model.md) | Tool-agnostic + Claude / Copilot mapping |
+| Visual architecture cheat sheet | [`docs/visual-architecture.md`](docs/visual-architecture.md) | All diagrams in one place |
+| Team onboarding templates | [`templates/team-onboarding/`](templates/team-onboarding/) | Copy-paste YAML/MD for new teams |
+| Conceptual platform skeleton | [`templates/platform/team-rag-service/`](templates/platform/team-rag-service/) | Team RAG service shape (API/MCP) |
+| SRS example team kit | [`examples/srs-team-rag/`](examples/srs-team-rag/) | Worked example using SRS as the team |
+| Local permission-trimming demo | [`examples/local-permission-demo/`](examples/local-permission-demo/) | Conceptual JSON+markdown ACL demo |
+| Bootstrap planner workflow | [`.github/prompts/`](.github/prompts/) + [`.github/agents/`](.github/agents/) | Plan-first, approval-first scaffolding flow (the framework's own dogfood pattern) |
+
+---
+
+## The framework eats its own dogfood
+
+This repository also ships the **bootstrap planner** — a plan-first, approval-first workflow (`/bootstrap-ai-plan-local`, `/refine-ai-plan-local`, `/implement-ai-plan-local`) that any team can run inside their own repo to derive a tailored set of agents, skills, prompts, and instructions for their objective. See [`README.md`](README.md) for the entry points and [`docs/agent-skill-model.md`](docs/agent-skill-model.md) for how it fits into the larger platform pattern.
+
+---
+
+## What this is not
+
+- ❌ Not a deployed Azure environment.
+- ❌ Not a list of MUAC-approved vendors.
+- ❌ Not a copy of any internal MUAC system.
+- ❌ Not a replacement for security review, IAM design, or data governance.
+- ✅ A **reusable proposal pattern** for the exploration working group.
+
+---
+
+## Core principles
 
 1. **Plan first.** Always produce a reviewable plan before any change.
 2. **Approval first.** Nothing is created without explicit user approval in chat.
-3. **Minimum useful setup.** Prefer the smallest set of AI assets that supports the stated objective.
-4. **Evidence over enthusiasm.** Every candidate must justify itself against objective, repo, and docs.
-5. **Deliberate separation.** Planning prompts never create files; implementation prompts never re-plan.
-
----
-
-## 🔭 Future mode
-
-When **WorkIQ** is available, the same framework can consume approved enterprise sources such as Confluence or Microsoft 365 content in addition to local `docs/references/`. The evaluation rubric and approval gate stay exactly the same — only the source of approved docs expands.
-
----
-
-## 🧾 In plain English
-
-- This framework is **not** the final solution for every team.
-- A team uses it **inside a real project repo** or a safe branch.
-- The team adds approved docs under `docs/references/`.
-- The prompts **generate a plan first**.
-- The team **reviews the plan**.
-- **Only approved items** should be implemented.
+3. **Read-only first.** Every new tool starts as read-only; mutation is a separate, gated step.
+4. **Permission-aware retrieval.** ACL filtering happens before the model sees chunks.
+5. **Right memory in the right place.** Company → connectors. Team → RAG. Project → repo. Live → MCP.
+6. **Write-back discipline.** Durable findings flow back to the right layer.
+7. **Vendor-aware, not vendor-locked.** The pattern works for Claude, GitHub Copilot, M365 Copilot, and others.
 
 ---
 

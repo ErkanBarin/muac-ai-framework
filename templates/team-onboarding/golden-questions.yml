@@ -1,0 +1,58 @@
+# Golden Questions — onboarding template
+#
+# A team's "honest" test set. Used to validate retrieval quality,
+# permission trimming, and the read-only-first MCP defaults.
+# Re-run after every config change, every ingestion change, and
+# on a recurring schedule.
+
+team: ""                       # e.g. "SRS"
+
+retrieval:
+  - id: R-001
+    question: ""
+    expected_doc_or_source: ""
+    expected_doc_type: ""
+    notes: ""
+  # - id: R-001
+  #   question: "Which document defines SRS alert acknowledgement?"
+  #   expected_doc_or_source: "SRS Interface Control Document"
+  #   expected_doc_type: "ICD"
+  #   notes: "Should cite the canonical ICD page"
+
+citation:
+  - id: C-001
+    question: ""
+    must_include: []           # list of phrases / source URLs that MUST appear
+    must_not_include: []       # list of restricted phrases that MUST NOT appear
+  # - id: C-001
+  #   question: "Summarize the SRS alert ack flow"
+  #   must_include: ["sourceUrl", "ICD"]
+  #   must_not_include: ["password", "token"]
+
+permissions:
+  - id: P-001
+    actor_role: "qa"           # which permissions.yml role the test user holds
+    question: ""
+    expected_behavior: "allow" # allow | deny
+    expected_message_pattern: ""
+  # - id: P-001
+  #   actor_role: "qa"
+  #   question: "Show me the SRS testability notes for ack flow"
+  #   expected_behavior: "allow"
+  - id: P-002
+    actor_role: "out-of-team"
+    question: ""
+    expected_behavior: "deny"
+    expected_message_pattern: "no accessible result|restricted"
+  # - id: P-002
+  #   actor_role: "out-of-team"
+  #   question: "Show me the SRS security risk analysis"
+  #   expected_behavior: "deny"
+
+edge_cases:
+  - id: E-001
+    question: ""
+    why_tricky: ""
+  # - id: E-001
+  #   question: "Find the ICD between SRS and the FDPS"
+  #   why_tricky: "Multiple ICDs exist; assistant must pick the latest non-deprecated one"

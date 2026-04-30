@@ -1,0 +1,89 @@
+# Tools Policy — onboarding template
+#
+# Selects MCP tools from the central catalog (docs/mcp-catalog.md) and
+# sets per-team default modes. Every tool starts in the most restrictive
+# mode acceptable for the team's workflow. Upgrades require approval.
+
+team: ""                       # e.g. "SRS"
+
+tools:
+  azure_mcp:
+    enabled: false
+    default_mode: "read-only"   # read-only | gated | high-risk-gated
+    rationale: ""               # why the team needs it
+    approver: ""                # who approves writes / mutations
+
+  bitbucket_git_mcp:
+    enabled: true
+    default_mode: "read-only"
+    rationale: "Source search, PR context for engineering work"
+    approver: ""
+
+  jira_mcp:
+    enabled: true
+    default_mode: "read-only"
+    rationale: "Traceability lookup; writes require approval"
+    approver: ""
+
+  confluence_mcp:
+    enabled: true
+    default_mode: "read-only"
+    rationale: "Find ICDs, architecture docs"
+    approver: ""
+
+  playwright_mcp:
+    enabled: false
+    default_mode: "gated"
+    rationale: "UI exploration / automation on test environments only"
+    approver: ""
+
+  read_only_db_mcp:
+    enabled: false
+    default_mode: "read-only"
+    approved_views: []          # explicit allowlist of DB views the MCP may query
+    rationale: ""
+    approver: ""
+
+  ci_cd_mcp:
+    enabled: true
+    default_mode: "read-only"
+    rationale: "Pipeline status; reruns gated"
+    approver: ""
+
+  observability_mcp:
+    enabled: true
+    default_mode: "read-only"
+    rationale: "Logs / metrics / traces"
+    approver: ""
+
+  work_iq_mcp:
+    enabled: false
+    default_mode: "permission-trimmed"
+    rationale: "M365 context — once approved by platform team"
+    approver: ""
+
+  team_rag_mcp:
+    enabled: true
+    default_mode: "permission-trimmed"
+    rationale: "Search the team's Azure AI Search index"
+    approver: ""
+
+  active_mutation_tools:
+    enabled: false
+    default_mode: "high-risk-gated"
+    allowed_environments: []    # never includes production by default
+    rationale: ""
+    approver: ""
+
+# Hard rules (apply to all tools above)
+rules:
+  - "Read tools are broadly available to the team."
+  - "Write tools require explicit approval; one-off approval applies only to that call."
+  - "Mutation tools require explicit flag, approval, and audit log."
+  - "Secrets, credentials, and L4 content are never exposed to agents."
+  - "The agent never auto-elevates a tool's mode."
+  - "The agent never installs or registers a new MCP server itself."
+
+audit:
+  log_tool_calls_above_tier: 3   # tier 4+ always logged
+  retention_days: 90

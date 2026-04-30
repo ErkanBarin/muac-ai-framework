@@ -1,0 +1,72 @@
+# Permissions — onboarding template
+#
+# Defines the Entra group roles a team uses, and which classification
+# levels each role may access via Team RAG.
+#
+# This file is the contract between the team and the platform team for
+# ACL filtering. The Team RAG MCP enforces it before any chunk reaches
+# the model.
+
+team: ""                       # e.g. "SRS"
+
+roles:
+  readers:
+    description: "Broad read access to L0 / L1 internal team docs"
+    entra_groups:
+      - ""                     # e.g. "SRS-Readers"
+    max_classification: "L1"
+
+  engineering:
+    description: "Engineers building the system"
+    entra_groups:
+      - ""                     # e.g. "SRS-Engineering"
+    max_classification: "L2"
+
+  qa:
+    description: "QA engineers — testability, traceability, defect work"
+    entra_groups:
+      - ""                     # e.g. "SRS-QA"
+    max_classification: "L2"
+
+  safety:
+    description: "Safety / compliance reviewers"
+    entra_groups:
+      - ""                     # e.g. "SRS-Safety"
+    max_classification: "L3"
+
+  restricted:
+    description: "Named members for L3+ sensitive content"
+    entra_groups:
+      - ""                     # e.g. "SRS-Restricted-Access"
+    max_classification: "L3"
+
+  admins:
+    description: "Team RAG admins — manage sources, metadata, ACL config"
+    entra_groups:
+      - ""                     # e.g. "SRS-RAG-Admins"
+    max_classification: "L3"
+
+# Sensitivity levels used across the framework
+classification_levels:
+  - level: L0
+    name: "General internal"
+    examples: "Coding standards, onboarding"
+  - level: L1
+    name: "Team internal"
+    examples: "Team design notes"
+  - level: L2
+    name: "Restricted technical"
+    examples: "Interface specs, environment docs"
+  - level: L3
+    name: "Sensitive / security-risk"
+    examples: "Threat models, vulnerability details"
+  - level: L4
+    name: "Secret / regulated"
+    examples: "Credentials, classified ops data — no default AI access"
+
+# Hard rules
+rules:
+  - "Never expose L4 to AI assistants by default."
+  - "Never let the assistant summarize content the user cannot access."
+  - "Membership changes propagate to retrieval at the next ACL refresh."
+  - "Group ownership and lifecycle are managed through normal IAM workflows, not the assistant."

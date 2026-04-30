@@ -1,110 +1,66 @@
 # MUAC AI Framework
 
-> 📖 **For a visual, shareable overview of the framework, see [OVERVIEW.md](OVERVIEW.md).**
+> 📖 **Showcase entry point: [OVERVIEW.md](OVERVIEW.md)** · 🚀 **Practical on-ramp: [QUICKSTART.md](QUICKSTART.md)**
 
-This repository provides a bootstrap AI planning flow for engineering teams.
+A reusable, governed pattern for AI-assisted engineering, QA, operations, safety, infrastructure, data, and documentation work. This repo is a **proposal-grade boilerplate** teams can copy and adapt — it is not a deployment, and nothing here implies any tool or vendor has been formally approved.
 
-It is an **AI planning and bootstrap scaffold**, not an application codebase. Its purpose is to help teams analyze their project context, inspect real repository state, and produce a low-noise AI enablement plan before any implementation.
+---
 
-## Current mode
-- Teams place approved project documents under `docs/references/`
-- The bootstrap planner analyzes those documents and the target project repository
-- The planner evaluates every candidate AI asset against the user's stated objective, repository evidence, and document evidence **before** producing any recommendation
-- Only then does the agent produce the final AI enablement plan with a shortlist of assets
-- The plan can then be reviewed, challenged, approved, and optionally implemented
+## 🗺️ Where to go next
 
-## Quick Start
-1. Copy this framework into a **real target repository** or a safe branch of that repository.
-2. Place approved project documents under `docs/references/`.
-3. Invoke the planning prompt **together with your objective in the same request**. The pattern is `/<prompt-name> <objective>`. For example: `/bootstrap-ai-plan-local I want UI test automation for this repo`. The prompt evaluates every candidate asset against your objective, repo evidence, and document evidence, then recommends only the strongest shortlist.
-4. Optionally tighten the plan with a narrower focus, for example: `/refine-ai-plan-local Focus the plan only on UI test automation for role-based workflows`.
-5. Review the plan carefully.
-6. Approve implementation only if you are satisfied — nothing should be created or modified without explicit approval.
-7. Once approved, run the implementation prompt with the explicit scope you are approving, for example: `/implement-ai-plan-local Approve and implement only the recommended repo instructions and UI testing skill`.
+| If you want… | Open this |
+|---|---|
+| The one-page architectural picture | [OVERVIEW.md](OVERVIEW.md) |
+| A practical onboarding guide for a team / repo / platform admin | [QUICKSTART.md](QUICKSTART.md) |
+| Connectors, Work IQ, Atlassian MCP, Team RAG, repo memory, live MCP — when to use what | [docs/connectors-and-rag-options.md](docs/connectors-and-rag-options.md) |
+| How users from other teams are blocked from restricted documents | [docs/permission-model.md](docs/permission-model.md) |
+| Phase-by-phase implementation plan from scratch | [docs/implementation-roadmap.md](docs/implementation-roadmap.md) |
+| The repo's external-knowledge map (where each kind of question is answered) | [docs/external-knowledge.md](docs/external-knowledge.md) |
+| Reusable per-repo tool policy | [docs/tool-policy.md](docs/tool-policy.md) |
+| 10-minute demo script for the exploration team | [docs/demo-script.md](docs/demo-script.md) |
+| The team RAG implementation pattern | [docs/team-rag-framework.md](docs/team-rag-framework.md) |
+| The recommended MCP catalog and governance tiers | [docs/mcp-catalog.md](docs/mcp-catalog.md) |
+| The per-repo project memory pattern | [docs/project-memory-pattern.md](docs/project-memory-pattern.md) |
+| How agents, skills, prompts, MCPs, and RAG fit together | [docs/agent-skill-model.md](docs/agent-skill-model.md) |
+| All the diagrams in one place | [docs/visual-architecture.md](docs/visual-architecture.md) |
+| Templates a new team can copy | [templates/team-onboarding/](templates/team-onboarding/) |
+| Conceptual platform skeleton (Team RAG service shape) | [templates/platform/team-rag-service/](templates/platform/team-rag-service/) |
+| A worked example using SRS as the team | [examples/srs-team-rag/](examples/srs-team-rag/) |
+| Conceptual local permission-trimming demo | [examples/local-permission-demo/](examples/local-permission-demo/) |
 
-> **Note:** This framework is best used against a **separate target repository** containing real application code. Pointing it at this scaffold itself will mostly describe the scaffold.
+---
 
-## How other teams use this framework
+## 🧭 The framework eats its own dogfood
 
-```mermaid
-flowchart TD
-    A[Team has a real project repo] --> B[Copy or add this framework into the target repo or a safe branch]
-    B --> C[Place approved docs in docs/references]
-    C --> D[Run /bootstrap-ai-plan-local]
-    D --> E[Bootstrap planner orchestrates]
-    E --> E1[docs-reader reads project docs]
-    E --> E2[repo-inspector checks real repo state]
-    E --> E3[challenger-reviewer critiques the draft plan]
-    E1 --> F[Final AI enablement plan]
-    E2 --> F
-    E3 --> F
-    F --> G{Team approves?}
-    G -->|No| H[Run /refine-ai-plan-local or revise manually]
-    H --> F
-    G -->|Yes| I[Implement only the approved items]
+This repo also ships a working **plan-first, approval-first bootstrap workflow**. Run it inside any real target repo to derive a tailored set of agents, skills, prompts, and instructions for your objective.
+
+The pattern is `/<prompt-name> <objective>`:
+
+```text
+/bootstrap-ai-plan-local I want UI test automation for this repo
+/refine-ai-plan-local Focus the plan only on UI test automation for role-based workflows
+/implement-ai-plan-local Approve and implement only the recommended repo instructions and UI testing skill
 ```
 
-## In plain English
+How it works in two sentences: the bootstrap planner reads your `docs/references/`, inspects the actual repo, and treats your stated objective as a primary input. Every candidate AI asset is evaluated against objective fit, repo evidence, document evidence, and maintenance cost — only `recommend now` items reach the final shortlist, and nothing is created without explicit approval.
 
-- This framework is not the final solution for every team.
-- A team uses it inside a real project repo or a safe branch of that repo.
-- The team adds approved docs under `docs/references/`.
-- The prompts generate a plan first.
-- The team reviews the plan.
-- Only approved items should be implemented.
+Three subagents run automatically inside the planning prompts:
 
-## What gets copied where
+- `docs-reader` — summarizes `docs/references/`
+- `repo-inspector` — inspects the actual repo state
+- `challenger-reviewer` — critiques the draft for weak assumptions and overengineering
 
-```mermaid
-flowchart LR
-    A[muac-ai-framework] --> B[Target project repo]
-    B --> C[.github/agents]
-    B --> D[.github/prompts]
-    B --> E[.github/copilot-instructions.md]
-    B --> F[docs/references]
-    F --> G[SSS / STD / architecture docs]
-    B --> H[Run prompts against real codebase]
-```
+For the full workflow narrative — including the candidate-evaluation rubric and implementation mode — see [OVERVIEW.md](OVERVIEW.md) and [docs/agent-skill-model.md](docs/agent-skill-model.md).
 
-## What runs under the hood
-The `/bootstrap-ai-plan-local` and `/refine-ai-plan-local` prompts both delegate to the `bootstrap-planner` agent, which internally orchestrates three subagents:
-- `docs-reader` — summarizes approved documents under `docs/references/`
-- `repo-inspector` — inspects the actual repository state
-- `challenger-reviewer` — critiques the draft plan for weak assumptions and overengineering before it is shown for approval
+---
 
-You do not invoke these subagents directly; they run as part of the planning flow.
+## 🧱 Core principles
 
-## How recommendations are decided
-The planner does not recommend AI assets loosely. It first evaluates every candidate instruction, skill, agent, prompt, and approved MCP guidance item, then decides what to keep.
-
-Each candidate is judged against:
-- the user's **stated objective**
-- **repo evidence** — does the actual codebase support or need it?
-- **document evidence** — do the approved references justify it?
-- **maintenance cost** — low / medium / high
-
-Each candidate is then classified as:
-- **recommend now** — clear fit, strong evidence, acceptable cost
-- **defer** — plausible but not justified yet, or cost too high for today's value
-- **reject** — no meaningful fit with the objective or evidence
-
-Only `recommend now` items appear in the final shortlist.
-
-## Implementation mode
-Planning and implementation are deliberately separated:
-
-- The planning prompts (`/bootstrap-ai-plan-local`, `/refine-ai-plan-local`) only produce and refine a plan. They do not create files.
-- The implementation prompt (`/implement-ai-plan-local`) applies **only the items that were explicitly approved** in the current chat.
-- Implementation mode is intentionally restricted to AI scaffolding files — copilot instructions, path-specific instruction files, agents, skills, prompts, and approved MCP guidance.
-- Application source code, dependency manifests, and CI/CD configuration are out of scope for this framework.
-
-If approval is unclear, the implementation flow stops and asks for clarification rather than guessing.
-
-## Future mode
-When WorkIQ is available, the same framework can use approved enterprise sources such as Confluence or Microsoft 365 content instead of or in addition to local reference documents.
-
-## Principles
-- Plan first
-- Do not modify project repositories automatically
-- Ask for approval before any implementation
-- Evaluate every candidate AI asset against the stated objective, repo evidence, and document evidence before recommending it
+1. **Plan first.** Always produce a reviewable plan before any change.
+2. **Approval first.** Nothing is created without explicit user approval in chat.
+3. **Read-only first.** Tools start read-only; mutation is a separate, gated step.
+4. **Permission-aware retrieval.** ACL filtering happens before the model sees chunks.
+5. **Right memory in the right place.** Company → connectors. Team → RAG. Project → repo. Live → MCP.
+6. **Write-back discipline.** Durable findings flow back to the right layer.
+7. **Vendor-aware, not vendor-locked.** The pattern works for Claude, GitHub Copilot, M365 Copilot, and others.
+8. **Evaluate every candidate AI asset against the stated objective, repo evidence, and document evidence before recommending it.**

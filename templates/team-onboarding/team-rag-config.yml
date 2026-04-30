@@ -1,0 +1,48 @@
+# Team RAG Configuration — onboarding template
+#
+# Drives the Azure AI Search index name, ingestion pipeline,
+# ACL mode, and which retrieval tools the Team RAG MCP exposes.
+
+team: ""                       # e.g. "SRS"
+index_name: ""                 # e.g. "srs-rag-index" (lowercase, hyphenated)
+
+ingestion:
+  cadence: "nightly"           # nightly | hourly | on-change
+  full_reindex: "weekly"       # weekly | monthly
+  removed_doc_handling: "purge" # purge | archive
+  embedding_model: ""          # platform team's approved model name
+
+acl:
+  mode: "source-acl"           # source-acl | m365-acl | explicit-allowlist
+  default_allowed_groups: []   # used when source ACL is missing
+
+classification_default: "L1"   # default if a source doesn't specify
+
+sources:
+  - name: ""                   # human-readable
+    type: confluence           # confluence | sharepoint | bitbucket | jira | filestore | other
+    locator: ""                # space key, site path, repo, project
+    classification: ""         # L0 | L1 | L2 | L3 | L4
+    owner_group: ""            # Entra group that owns the source
+    allowed_groups: []         # explicit override for this source
+    federated: false           # true => fetched live, never indexed
+  # - name: "SRS Confluence space"
+  #   type: confluence
+  #   locator: "spaceKey:SRS"
+  #   classification: L1
+  #   owner_group: "SRS-Architecture"
+  #   allowed_groups: ["SRS-Engineering", "SRS-QA", "SRS-Safety"]
+  #   federated: false
+
+retrieval_tools:               # methods the Team RAG MCP will expose
+  - search_team_docs
+  - get_doc_summary
+  - find_requirement
+  - find_interface
+  - find_testability_notes
+  - find_owner
+
+audit:
+  log_all_queries: true
+  log_blocked_results: true
+  retention_days: 90

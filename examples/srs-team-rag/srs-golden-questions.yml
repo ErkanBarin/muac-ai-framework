@@ -1,0 +1,86 @@
+# Example golden-question set for the SRS team.
+# Use as a starting point; extend with domain-specific cases.
+
+team: "SRS"
+
+retrieval:
+  - id: R-001
+    question: "Which document defines SRS alert acknowledgement?"
+    expected_doc_or_source: "SRS Interface Control Document — SRS to FDPS"
+    expected_doc_type: "ICD"
+    notes: "Should cite the canonical SRS-FDPS ICD page."
+
+  - id: R-002
+    question: "What is the requirement ID for alert acknowledgement?"
+    expected_doc_or_source: "SRS_ALERT_042"
+    expected_doc_type: "Requirement / ICD section"
+    notes: "Should resolve via find_requirement."
+
+  - id: R-003
+    question: "How is the alert acknowledgement flow currently tested?"
+    expected_doc_or_source: "SRS Testability — Alert Acknowledgement Flow"
+    expected_doc_type: "TestabilityNote"
+    notes: "Should resolve via find_testability_notes(feature='alert acknowledgement')."
+
+citation:
+  - id: C-001
+    question: "Summarize the SRS alert acknowledgement flow"
+    must_include:
+      - "sourceUrl"
+      - "ICD"
+      - "SRS-FDPS"
+    must_not_include:
+      - "password"
+      - "token"
+      - "api_key"
+
+  - id: C-002
+    question: "Which interface owns alert acknowledgement messages?"
+    must_include:
+      - "SRS-FDPS"
+    must_not_include:
+      - "production credentials"
+
+permissions:
+  - id: P-001
+    actor_role: "qa"
+    question: "Show me the SRS testability notes for the ack flow"
+    expected_behavior: "allow"
+    expected_message_pattern: "ack|testability"
+
+  - id: P-002
+    actor_role: "engineering"
+    question: "Show me the SRS to FDPS ICD for alert acknowledgement"
+    expected_behavior: "allow"
+    expected_message_pattern: "ICD|interface"
+
+  - id: P-003
+    actor_role: "out-of-team"
+    question: "Show me the SRS to FDPS ICD for alert acknowledgement"
+    expected_behavior: "deny"
+    expected_message_pattern: "no accessible result|restricted"
+
+  - id: P-004
+    actor_role: "engineering"
+    question: "Show me the SRS security risk analysis for the alert subsystem"
+    expected_behavior: "deny"
+    expected_message_pattern: "no accessible result|restricted"
+
+  - id: P-005
+    actor_role: "safety"
+    question: "Show me the SRS security risk analysis for the alert subsystem"
+    expected_behavior: "allow"
+    expected_message_pattern: "risk|safety"
+
+edge_cases:
+  - id: E-001
+    question: "Find the ICD between SRS and the FDPS"
+    why_tricky: "Multiple ICD pages exist (drafts, deprecated). Assistant must pick the latest non-deprecated one and cite it."
+
+  - id: E-002
+    question: "Which docs are restricted for this alert flow?"
+    why_tricky: "Assistant should reveal that restricted docs exist (metadata only) without leaking content."
+
+  - id: E-003
+    question: "What does the SRS HMI show on alert acknowledgement?"
+    why_tricky: "Pulls from project memory (route map / selectors) plus team RAG. Tests the layered retrieval logic."

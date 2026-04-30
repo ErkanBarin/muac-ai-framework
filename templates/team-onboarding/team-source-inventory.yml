@@ -1,0 +1,70 @@
+# Team Source Inventory — onboarding template
+#
+# Fill this in as a team. It is the input to the Team RAG configuration,
+# permissions setup, and tools policy. No secrets, no live URLs of
+# restricted systems beyond placeholders.
+
+team:
+  name: ""                    # e.g. "SRS"
+  description: ""             # one-line summary of the team's domain
+  owner: ""                   # team lead / architecture owner
+  contact: ""                 # mailing list or chat channel
+
+systems_owned:                # the systems this team is responsible for
+  - name: ""
+    description: ""
+  # - name: "SRS"
+  #   description: "Surveillance Reception System"
+
+source_systems:               # where this team's knowledge lives today
+  - type: confluence          # confluence | sharepoint | bitbucket | jira | filestore | other
+    name: ""                  # human-readable name
+    locator: ""               # space key, site path, repo, project key (placeholder OK)
+    classification: ""        # L0 | L1 | L2 | L3 | L4
+    owner_group: ""           # Entra group that owns the source
+  # - type: confluence
+  #   name: "SRS Confluence space"
+  #   locator: "spaceKey:SRS"
+  #   classification: L1
+  #   owner_group: "SRS-Architecture"
+
+authoritative_docs:           # which doc types are considered "truth"
+  - doc_type: ""              # e.g. SSS, STD, ICD, ADR, Runbook
+    typical_location: ""      # which source_system above hosts it
+    classification: ""
+  # - doc_type: ICD
+  #   typical_location: "SRS Confluence space"
+  #   classification: L2
+
+sensitive_docs:               # explicitly sensitive items (L3+)
+  - doc_type: ""
+    why: ""
+    classification: ""
+    handling: ""              # e.g. "federated retrieval only"
+
+allowed_groups:               # Entra groups that may access team content
+  - ""                        # e.g. "SRS-Engineering"
+  - ""                        # e.g. "SRS-QA"
+  - ""                        # e.g. "SRS-Safety"
+
+common_questions:             # the kinds of questions AI should answer well
+  - ""
+  # - "What is the message contract for SRS-FDPS acknowledgement?"
+  # - "Which feature is covered by SRS_REQ_042?"
+
+required_tools:               # MCP tools the team will need
+  - ""
+  # - "Bitbucket / Git MCP"
+  # - "Read-only DB MCP"
+  # - "Playwright MCP"
+
+expected_outputs:             # what the assistant produces for this team
+  - ""
+  # - "Test plans"
+  # - "Traceability summaries"
+  # - "Refactoring proposals"
+
+owners:
+  system_owner: ""
+  document_owner: ""
+  security_owner: ""

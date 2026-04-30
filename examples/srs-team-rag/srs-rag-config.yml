@@ -1,0 +1,88 @@
+# Example Team RAG configuration for the SRS team.
+# All names and locators are illustrative placeholders.
+
+team: "SRS"
+index_name: "srs-rag-index"
+
+ingestion:
+  cadence: "nightly"
+  full_reindex: "weekly"
+  removed_doc_handling: "purge"
+  embedding_model: "platform-approved-embedding-model"
+
+acl:
+  mode: "source-acl"
+  default_allowed_groups:
+    - "SRS-Engineering"
+    - "SRS-QA"
+    - "SRS-Architecture"
+
+classification_default: "L1"
+
+sources:
+  - name: "SRS Confluence space"
+    type: "confluence"
+    locator: "spaceKey:SRS"
+    classification: "L1"
+    owner_group: "SRS-Architecture"
+    allowed_groups:
+      - "SRS-Engineering"
+      - "SRS-QA"
+      - "SRS-Architecture"
+    federated: false
+
+  - name: "SRS SharePoint architecture docs"
+    type: "sharepoint"
+    locator: "/sites/SRS/Architecture"
+    classification: "L2"
+    owner_group: "SRS-Architecture"
+    allowed_groups:
+      - "SRS-Engineering"
+      - "SRS-Architecture"
+      - "SRS-Safety"
+    federated: false
+
+  - name: "SRS Bitbucket docs (curated)"
+    type: "bitbucket"
+    locator: "repo:srs-docs/path:docs/curated"
+    classification: "L1"
+    owner_group: "SRS-Engineering"
+    allowed_groups:
+      - "SRS-Engineering"
+      - "SRS-QA"
+      - "SRS-Architecture"
+    federated: false
+
+  - name: "SRS interface specifications (ICDs)"
+    type: "confluence"
+    locator: "spaceKey:SRS/parentPage:ICDs"
+    classification: "L2"
+    owner_group: "SRS-Architecture"
+    allowed_groups:
+      - "SRS-Engineering"
+      - "SRS-Architecture"
+      - "SRS-Safety"
+      - "FDPS-Engineering"
+    federated: false
+
+  - name: "SRS security risk analyses"
+    type: "filestore"
+    locator: "restricted-store/srs/security"
+    classification: "L3"
+    owner_group: "SRS-Safety"
+    allowed_groups:
+      - "SRS-Safety"
+    federated: true
+
+retrieval_tools:
+  - search_team_docs
+  - get_doc_summary
+  - find_requirement
+  - find_interface
+  - find_testability_notes
+  - find_owner
+
+audit:
+  log_all_queries: true
+  log_blocked_results: true
+  retention_days: 90

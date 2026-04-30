@@ -1,0 +1,75 @@
+{
+  "_comment": "Conceptual Team RAG index for the local permission-trimming demo. Placeholder content only — not a real index, not a real query format.",
+  "indexName": "srs-team-rag-demo",
+  "chunks": [
+    {
+      "id": "chunk-001",
+      "team": "SRS",
+      "system": "SRS",
+      "sourceSystem": "Confluence",
+      "sourceUrl": "https://example.invalid/srs/overview",
+      "docTitle": "SRS Overview",
+      "docType": "Overview",
+      "classification": "L0-general",
+      "allowedGroups": ["ALL-MUAC"],
+      "ownerGroup": "SRS-Engineering",
+      "lastIndexed": "2026-04-30",
+      "content": "[PLACEHOLDER] Public SRS overview: what the SRS subsystem does at a high level, with no implementation details, no interface specifics, and no security details."
+    },
+    {
+      "id": "chunk-002",
+      "team": "SRS",
+      "system": "SRS",
+      "sourceSystem": "Confluence",
+      "sourceUrl": "https://example.invalid/srs/team-flow",
+      "docTitle": "SRS Team-Internal Flow",
+      "docType": "Design",
+      "classification": "L1-team-internal",
+      "allowedGroups": ["SRS-Engineering", "SRS-QA", "SRS-Architecture"],
+      "ownerGroup": "SRS-Engineering",
+      "lastIndexed": "2026-04-30",
+      "feature": "alert-acknowledgement",
+      "testLane": "integration",
+      "lastIndexedBy": "ingestion-pipeline",
+      "content": "[PLACEHOLDER] SRS team-internal flow notes for alert acknowledgement, including testability hints (which lanes can verify ack behavior) and known constraints. No restricted interface specifics."
+    },
+    {
+      "id": "chunk-003",
+      "team": "SRS",
+      "system": "SRS",
+      "sourceSystem": "SharePoint",
+      "sourceUrl": "https://example.invalid/srs/icd-restricted",
+      "docTitle": "SRS Restricted Interface (ICD)",
+      "docType": "ICD",
+      "classification": "L2-restricted",
+      "allowedGroups": ["SRS-Architecture", "SRS-Engineering"],
+      "ownerGroup": "SRS-Architecture",
+      "lastIndexed": "2026-04-30",
+      "interface": "SRS-PEER-ACK",
+      "requirementId": "SRS_ALERT_042",
+      "content": "[PLACEHOLDER] Restricted ICD content describing the SRS-PEER-ACK interface contract for acknowledgement messages, including message field shape and required fields. Architecture-and-engineering only."
+    },
+    {
+      "id": "chunk-004",
+      "team": "SRS",
+      "system": "SRS",
+      "sourceSystem": "Restricted store",
+      "sourceUrl": "https://example.invalid/srs/security-note",
+      "docTitle": "SRS Security-Sensitive Note",
+      "docType": "Security analysis",
+      "classification": "L3-sensitive",
+      "allowedGroups": ["SRS-Restricted-Access"],
+      "ownerGroup": "SRS-Safety",
+      "lastIndexed": "2026-04-30",
+      "safetyImpact": "high",
+      "content": "[PLACEHOLDER] Security-sensitive note about a known risk in the SRS acknowledgement path. Only members of SRS-Restricted-Access can retrieve. Federated retrieval recommended in production."
+    }
+  ],
+  "_excludedFromIndex": [
+    {
+      "_comment": "L4 / secret / regulated content is intentionally NOT indexed in this demo. The platform must never copy L4 content into a Team RAG index.",
+      "exampleType": "credentials, classified ops data, regulated PII",
+      "policy": "no-default-AI-access"
+    }
+  ]
+}

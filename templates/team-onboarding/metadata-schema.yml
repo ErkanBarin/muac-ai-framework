@@ -1,0 +1,29 @@
+# Team RAG Metadata Schema
+#
+# Required fields are stamped on every chunk during ingestion.
+# Optional fields enrich retrieval (better filtering, citations, traceability).
+# All field values are strings unless otherwise stated.
+
+required:
+  team: ""                    # team name, e.g. "SRS"
+  system: ""                  # system the doc applies to
+  sourceSystem: ""            # confluence | sharepoint | bitbucket | jira | filestore | other
+  sourceUrl: ""               # canonical URL back to the source doc
+  docTitle: ""                # title of the source document
+  docType: ""                 # SSS | STD | ICD | Architecture | Runbook | ADR | …
+  classification: ""          # L0 | L1 | L2 | L3 | L4
+  ownerGroup: ""              # Entra group that owns the doc
+  allowedGroups: []           # list of Entra groups allowed to read
+  lastIndexed: ""             # ISO-8601 date
+
+optional:
+  requirementId: ""           # external requirement / ticket ID
+  feature: ""                 # feature name
+  interface: ""               # interface or contract identifier
+  testLane: ""                # UI | unit | integration | manual | …
+  safetyImpact: ""            # none | low | medium | high
+  component: ""               # component or module name
+  serviceName: ""             # service / microservice
+  release: ""                 # release / version label
+  language: ""                # language code if multilingual
+  tags: []                    # free-form tags
